@@ -1,8 +1,35 @@
+import json
 from datetime import date
+from pathlib import Path
 
 #=======================
 tasks = []
 next_task_id = 1
+DATA_FILE = Path(__file__).parent / "tasks.json"
+
+def save_tasks():
+    with open(DATA_FILE, "w", encoding="utf-8") as file:
+        json.dump(tasks, file, indent=4, ensure_ascii=False)
+
+def load_tasks():
+    global tasks
+    global next_task_id
+
+    try:
+        with open(DATA_FILE, "r", encoding="utf-8") as file:
+            tasks = json.load(file)
+
+        if tasks:
+            next_task_id = max(task['ID'] for task in tasks) + 1
+        else:
+            next_task_id = 1
+
+    except FileNotFoundError:
+        tasks = []
+        next_task_id = 1
+    except json.JSONDecodeError:
+        tasks = []
+        next_task_id = 1
 
 def add_study_task():
     global next_task_id
@@ -32,7 +59,7 @@ def add_study_task():
             print()
     task_status = False
     created_date = date.today().strftime("%d-%m-%Y")
-    completed_date = ' '
+    completed_date = ''
     task = {
         'ID': next_task_id,
         'Title': add_title,
@@ -46,6 +73,7 @@ def add_study_task():
     }
     tasks.append(task)
     next_task_id += 1
+    save_tasks()
 
 def display_tasks():
     n_task = 1
@@ -62,20 +90,27 @@ def display_tasks():
                 print(f'{n_task}. {item["Title"]} - Completed')
             n_task += 1
 
+def get_number_input(message):
+    while True:
+        try:
+            return int(input(message))
+        except ValueError:
+            print("Please enter a valid number.")
+
 def display_task_details():
     display_tasks()
     print()
     if not tasks:
         print(end=' ')
     else:
-        task_number = int(input('Select the task you want to see the details: '))
+        task_number = get_number_input("Select the task: ")
         print()
         if 1 <= task_number <= len(tasks):
             index = task_number - 1
             selected_task = tasks[index]
             for key, value in selected_task.items():
                 if key == 'Status':
-                    if value == False:
+                    if not value:
                         print(f'{key}: Pending')
                     else:
                         print(f'{key}: Completed')
@@ -109,7 +144,7 @@ def display_completed_tasks():
         print('=== Your completed tasks ===')
         print()
         for item in tasks:
-            if item['Status'] == True:
+            if item['Status']:
                 print(f'{n_task}. {item["Title"]}')
                 completed_indices.append(item)
                 n_task += 1
@@ -133,15 +168,17 @@ def mark_task_as_completed():
             print('All your tasks are completed!')
         else:
             print()
-            task_number = int(input('Mark task as completed: '))
+            task_number = get_number_input("Select the task: ")
             print()        
             if 1 <= task_number <= len(pending_indices):
                 actual_index = pending_indices[task_number - 1] 
                 actual_index['Status'] = True
                 actual_index['Completed date'] = date.today().strftime("%d-%m-%Y")
+                save_tasks()
                 print(f'Task marked as completed!')
             else:
                 print('This task does not exist.')
+
 
 def edit_task():
     display_tasks()
@@ -150,19 +187,19 @@ def edit_task():
         if not tasks:
             break
         else:
-            task_number = int(input('Select the task you want to edit the details: '))
+            task_number = get_number_input("Select the task: ")
             print()
             if 1 <= task_number <= len(tasks):
                 index = task_number - 1
                 selected_task = tasks[index]
                 for key, value in selected_task.items():
                     if key == 'Status':
-                        if value == False:
+                        if not value:
                             print(f'{key}: Pending')
                         else:
                             print(f'{key}: Completed')
                     elif key == 'Completed date':
-                        if value == False:
+                        if not value:
                             print(f'{key}: ')
                         else:
                             print(f'{key}: {value}')
@@ -187,6 +224,7 @@ def edit_task():
                         selected_task["Title"] = edit_title
                         print()
                         print('Title updated successfully!')
+                        save_tasks()
                         break
                     elif details_number == '2':
                         print(f'Current Subject: {selected_task["Subject"]}')
@@ -194,6 +232,7 @@ def edit_task():
                         selected_task["Subject"] = edit_subject
                         print()
                         print('Subject updated successfully!')
+                        save_tasks()
                         break
                     elif details_number == '3':
                         print(f'Current Description: {selected_task["Description"]}')
@@ -201,6 +240,7 @@ def edit_task():
                         selected_task["Description"] = edit_description
                         print()
                         print('Description updated successfully!')
+                        save_tasks()
                         break
                     elif details_number == '4':
                         print(f'Current Deadline: {selected_task["Deadline"]}')
@@ -208,6 +248,7 @@ def edit_task():
                         selected_task["Deadline"] = edit_deadline
                         print()
                         print('Deadline updated successfully!')
+                        save_tasks()
                         break
                     elif details_number == '5':
                         print(f'Current Priority: {selected_task["Priority"]}')
@@ -232,7 +273,8 @@ def edit_task():
                                 print('Invalid choice. Please try again.') 
                         selected_task["Priority"] = edited_priority
                         print()
-                        print('Priority updated successfully!')                        
+                        print('Priority updated successfully!')
+                        save_tasks()
                         break
                     elif details_number == '6':
                         break
@@ -249,13 +291,14 @@ def delete_task():
     if not tasks:
         print(end=' ')
     else:
-        task_number = int(input('Select the task you want to delete: '))
+        task_number = get_number_input("Select the task: ")
         if 1 <= task_number <= len(tasks):
             index = task_number - 1
             while True:
                 confirmation = input('Are you sure you want to delete this task? yes/no: ')
                 if confirmation.lower() == 'yes':
                     tasks.pop(index)
+                    save_tasks()
                     print('Task successfully deleted!')
                     break
                 elif confirmation.lower() == 'no':
@@ -286,6 +329,8 @@ def get_user_choice():
     return choice
 
 def main():
+    load_tasks()
+
     while True:
         display_menu()
         choice = get_user_choice()
