@@ -1,17 +1,27 @@
-# Python study manager
+# Study Manager
 
-This is a simple project written in Python to organize study tasks, track progress, and practice fundamental language concepts.
+A terminal-based study task manager built with Python.
 
 ## Features
 
-- Add tasks
-- List pending tasks
+- Add study tasks
+- View task details
 - Mark tasks as completed
-- Separate tasks by category
-- Save data to a JSON file
+- Edit and delete tasks
+- Save and load tasks with JSON
+- Search and filter tasks
+- Generate progress reports
 
-## Technologies used
+## Technologies
 
 - Python
 - JSON
 - Git/GitHub
+
+## How to run
+
+python main.py
+
+## Project status
+
+Version 5 in progress.
