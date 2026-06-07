@@ -2,6 +2,7 @@ import storage
 import tasks
 import reports
 import filters
+import sessions
 
 def display_menu():
     print('========== Study Manager ==========')
@@ -18,16 +19,21 @@ def display_menu():
     print('10. Search tasks')
     print('11. Filter tasks')
     print('12. View overdue tasks')
-    print('13. Exit')
+    print()
+    print('13. Add study session')
+    print('14. View study sessions')
+    print('15. Study time report')
+    print('16. Exit')
     print()
 
 def get_user_choice():
-    choice = input('Enter your choice (1-13): ')
+    choice = input('Enter your choice (1-16): ')
     print()
     return choice
 
 def main():
     storage.load_tasks()
+    storage.load_sessions()
 
     while True:
         display_menu()
@@ -94,6 +100,21 @@ def main():
             filters.overdue_tasks()
 
         elif choice == '13':
+            print('--Add study session selected--')
+            print()
+            sessions.add_study_session()
+
+        elif choice == '14':
+            print('--View study sessions selected--')
+            print()
+            sessions.display_sessions()
+
+        elif choice == '15':
+            print('--Study time report selected--')
+            print()
+            sessions.study_sessions_report()
+
+        elif choice == '16':
             print('Exiting...')
             break
 

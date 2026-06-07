@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+
 tasks = []
 next_task_id = 1
 DATA_FILE = Path(__file__).parent / "tasks.json"
@@ -28,3 +29,32 @@ def load_tasks():
     except json.JSONDecodeError:
         tasks = []
         next_task_id = 1
+
+
+sessions = []
+next_session_id = 1
+SESSIONS_FILE = Path(__file__).parent / "sessions.json"
+
+def save_sessions():
+    with open(SESSIONS_FILE, "w", encoding="utf-8") as file:
+        json.dump(sessions, file, indent=4, ensure_ascii=False)
+
+def load_sessions():
+    global sessions
+    global next_session_id
+
+    try:
+        with open(SESSIONS_FILE, "r", encoding="utf-8") as file:
+            sessions = json.load(file)
+
+        if sessions:
+            next_session_id = max(session['ID'] for session in sessions) + 1
+        else:
+            next_session_id = 1
+
+    except FileNotFoundError:
+        sessions = []
+        next_session_id = 1
+    except json.JSONDecodeError:
+        sessions = []
+        next_session_id = 1
