@@ -58,3 +58,14 @@ def convert_text_to_date(date_text):
         return datetime.strptime(date_text, "%d/%m/%Y").date()
     except ValueError:
         return None
+
+def format_minutes(minutes):
+    hours = minutes // 60
+    remaining_minutes = minutes % 60
+
+    if hours == 0:
+        return f'{remaining_minutes} minutes'
+    elif remaining_minutes == 0:
+        return f'{hours}h'
+    else:
+        return f'{hours}h {remaining_minutes}min'

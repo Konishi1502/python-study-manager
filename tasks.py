@@ -58,11 +58,13 @@ def display_task_details():
     if not storage.tasks:
         return
 
+    print()
     task_number = utils.get_number_input(
         'Select the task you want to see the details: ',
         1,
         len(storage.tasks)
     )
+    print()
 
     index = task_number - 1
     selected_task = storage.tasks[index]
@@ -162,10 +164,10 @@ def edit_task():
         print()
 
         while True:
-            details_number = input('Enter your choice (1-6): ')
+            details_number = utils.get_number_input('Enter your choice (1-6): ', 1, 6)
             print()
 
-            if details_number == '1':
+            if details_number == 1:
                 print(f'Current Title: {selected_task["Title"]}')
                 edit_title = input('New title: ')
                 selected_task["Title"] = edit_title
@@ -174,7 +176,7 @@ def edit_task():
                 print('Title updated successfully!')
                 break
 
-            elif details_number == '2':
+            elif details_number == 2:
                 print(f'Current Subject: {selected_task["Subject"]}')
                 edit_subject = input('New subject: ')
                 selected_task["Subject"] = edit_subject
@@ -183,7 +185,7 @@ def edit_task():
                 print('Subject updated successfully!')
                 break
 
-            elif details_number == '3':
+            elif details_number == 3:
                 print(f'Current Description: {selected_task["Description"]}')
                 edit_description = input('New description: ')
                 selected_task["Description"] = edit_description
@@ -192,7 +194,7 @@ def edit_task():
                 print('Description updated successfully!')
                 break
 
-            elif details_number == '4':
+            elif details_number == 4:
                 print(f'Current Deadline: {selected_task["Deadline"]}')
                 edit_deadline = utils.get_valid_date('New deadline (dd/mm/yyyy): ')
                 selected_task["Deadline"] = edit_deadline
@@ -201,7 +203,7 @@ def edit_task():
                 print('Deadline updated successfully!')
                 break
 
-            elif details_number == '5':
+            elif details_number == 5:
                 print(f'Current Priority: {selected_task["Priority"]}')
                 print()
                 selected_task["Priority"] = utils.choose_priority()
@@ -209,7 +211,7 @@ def edit_task():
                 print('Priority updated successfully!')
                 break
 
-            elif details_number == '6':
+            elif details_number == 6:
                 break
 
             else:
