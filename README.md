@@ -24,4 +24,4 @@ python main.py
 
 ## Project status
 
-Version 8 in progress.
+Version 9 in progress.
