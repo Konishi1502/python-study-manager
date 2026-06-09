@@ -31,22 +31,39 @@ def get_valid_date(message):
             print()
 
 def choose_priority():
-    print('Task priority:')
-    print('1. Low')
-    print('2. Medium')
-    print('3. High')
+    print("Task priority:")
+    print("1. Low")
+    print("2. Medium")
+    print("3. High")
     print()
 
-    choice = get_number_input('Set the task priority: ', 1, 3)
+    choice = get_number_input("Set the task priority: ", 1, 3)
     if choice == 1:
-        return 'Low'
+        return "Low"
     elif choice == 2:
-        return 'Medium'
+        return "Medium"
     else:
-        return 'High'
+        return "High"
+
+def choose_project_status():
+    print("Project status:")
+    print("1. Not started")
+    print("2. In progress")
+    print("3. Paused")
+    print("4. Completed")
+
+    choice = get_number_input("Set the project status: ", 1, 4)
+    if choice == 1:
+        return "Not started"
+    elif choice == 2:
+        return "In progress"
+    elif choice == 3:
+        return "Paused"
+    else:
+        return "Completed"
 
 def get_task_status_text(task):
-    if task["Status"]:
+    if task['Status']:
         status = "Completed"
         return status
     else:
@@ -64,8 +81,8 @@ def format_minutes(minutes):
     remaining_minutes = minutes % 60
 
     if hours == 0:
-        return f'{remaining_minutes} minutes'
+        return f"{remaining_minutes} minutes"
     elif remaining_minutes == 0:
-        return f'{hours}h'
+        return f"{hours}h"
     else:
-        return f'{hours}h {remaining_minutes}min'
+        return f"{hours}h {remaining_minutes}min"

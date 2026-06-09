@@ -58,3 +58,31 @@ def load_sessions():
     except json.JSONDecodeError:
         sessions = []
         next_session_id = 1
+
+projects = []
+next_project_id = 1
+PROJECTS_FILE = Path(__file__).parent / "projects.json"
+
+def save_projects():
+    with open(PROJECTS_FILE, "w", encoding="utf-8") as file:
+        json.dump(projects, file, indent=4, ensure_ascii=False)
+
+def load_projects():
+    global projects
+    global next_project_id
+
+    try:
+        with open(PROJECTS_FILE, "r", encoding="utf-8") as file:
+            projects = json.load(file)
+
+        if projects:
+            next_project_id = max(project['ID'] for project in projects) + 1
+        else:
+            next_project_id = 1
+            
+    except FileNotFoundError:
+        projects = []
+        next_project_id = 1
+    except json.JSONDecodeError:
+        projects = []
+        next_project_id = 1

@@ -3,25 +3,25 @@ import storage
 import utils
 
 def add_study_task():
-    add_title = input('Add a title to your task: ')
-    add_subject = input('Add a subject to your task: ')
-    add_description = input('Add a description to your task: ')
-    add_deadline = utils.get_valid_date('Add a deadline to your task (dd/mm/yyyy): ')
+    task_title = input('Add a title to your task: ')
+    task_subject = input('Add a subject to your task: ')
+    task_description = input('Add a description to your task: ')
+    task_deadline = utils.get_valid_date('Add a deadline to your task (dd/mm/yyyy): ')
     priority = utils.choose_priority()
     task_status = False
     created_date = date.today().strftime("%d/%m/%Y")
-    completed_date = ''
+    task_completed_date = ''
 
     task = {
         'ID': storage.next_task_id,
-        'Title': add_title,
-        'Subject': add_subject,
-        'Description': add_description,
+        'Title': task_title,
+        'Subject': task_subject,
+        'Description': task_description,
         'Priority': priority,
         'Status': task_status,
         'Created date': created_date,
-        'Deadline': add_deadline,
-        'Completed date': completed_date
+        'Deadline': task_deadline,
+        'Completed date': task_completed_date
     }
 
     storage.tasks.append(task)
@@ -139,86 +139,74 @@ def edit_task():
     display_tasks()
     if not storage.tasks:
         return
+
+    print()
+    task_number = utils.get_number_input(
+        'Select the task you want to edit: ',
+        1,
+        len(storage.tasks)
+    )
     print()
 
-    while True:
-        task_number = utils.get_number_input(
-            'Select the task you want to see the details: ',
-            1,
-            len(storage.tasks)
-        )
+    index = task_number - 1
+    selected_task = storage.tasks[index]
+
+    display_single_task(selected_task)
+    print()
+    print('=== What do you want to edit? ===')
+    print()
+    print(f'1. Title - {selected_task["Title"]}')
+    print(f'2. Subject - {selected_task["Subject"]}')
+    print(f'3. Description - {selected_task["Description"]}')
+    print(f'4. Deadline - {selected_task["Deadline"]}')
+    print(f'5. Priority - {selected_task["Priority"]}')
+    print('6. Go back')
+    print()
+
+    details_number = utils.get_number_input('Enter your choice (1-6): ', 1, 6)
+    print()
+
+    if details_number == 1:
+        print(f'Current Title: {selected_task["Title"]}')
+        edit_title = input('New title: ')
+        selected_task["Title"] = edit_title
         print()
-        index = task_number - 1
-        selected_task = storage.tasks[index]
+        storage.save_tasks()
+        print('Title updated successfully!')
 
-        display_single_task(selected_task)
+    elif details_number == 2:
+        print(f'Current Subject: {selected_task["Subject"]}')
+        edit_subject = input('New subject: ')
+        selected_task["Subject"] = edit_subject
         print()
-        print('=== What do you want to edit? ===')
+        storage.save_tasks()
+        print('Subject updated successfully!')
+
+    elif details_number == 3:
+        print(f'Current Description: {selected_task["Description"]}')
+        edit_description = input('New description: ')
+        selected_task["Description"] = edit_description
         print()
-        print(f'1. Title - {selected_task["Title"]}')
-        print(f'2. Subject - {selected_task["Subject"]}')
-        print(f'3. Description - {selected_task["Description"]}')
-        print(f'4. Deadline - {selected_task["Deadline"]}')
-        print(f'5. Priority - {selected_task["Priority"]}')
-        print('6. Go back')
+        storage.save_tasks()
+        print('Description updated successfully!')
+
+    elif details_number == 4:
+        print(f'Current Deadline: {selected_task["Deadline"]}')
+        edit_deadline = utils.get_valid_date('New deadline (dd/mm/yyyy): ')
+        selected_task["Deadline"] = edit_deadline
         print()
+        storage.save_tasks()
+        print('Deadline updated successfully!')
 
-        while True:
-            details_number = utils.get_number_input('Enter your choice (1-6): ', 1, 6)
-            print()
+    elif details_number == 5:
+        print(f'Current Priority: {selected_task["Priority"]}')
+        print()
+        selected_task["Priority"] = utils.choose_priority()
+        storage.save_tasks()
+        print('Priority updated successfully!')
 
-            if details_number == 1:
-                print(f'Current Title: {selected_task["Title"]}')
-                edit_title = input('New title: ')
-                selected_task["Title"] = edit_title
-                print()
-                storage.save_tasks()
-                print('Title updated successfully!')
-                break
-
-            elif details_number == 2:
-                print(f'Current Subject: {selected_task["Subject"]}')
-                edit_subject = input('New subject: ')
-                selected_task["Subject"] = edit_subject
-                print()
-                storage.save_tasks()
-                print('Subject updated successfully!')
-                break
-
-            elif details_number == 3:
-                print(f'Current Description: {selected_task["Description"]}')
-                edit_description = input('New description: ')
-                selected_task["Description"] = edit_description
-                print()
-                storage.save_tasks()
-                print('Description updated successfully!')
-                break
-
-            elif details_number == 4:
-                print(f'Current Deadline: {selected_task["Deadline"]}')
-                edit_deadline = utils.get_valid_date('New deadline (dd/mm/yyyy): ')
-                selected_task["Deadline"] = edit_deadline
-                print()
-                storage.save_tasks()
-                print('Deadline updated successfully!')
-                break
-
-            elif details_number == 5:
-                print(f'Current Priority: {selected_task["Priority"]}')
-                print()
-                selected_task["Priority"] = utils.choose_priority()
-                storage.save_tasks()
-                print('Priority updated successfully!')
-                break
-
-            elif details_number == 6:
-                break
-
-            else:
-                print('Invalid choice. Please try again.')
-                print()
-
-        break
+    elif details_number == 6:
+        return
 
 def delete_task():
     display_tasks()

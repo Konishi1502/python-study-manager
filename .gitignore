@@ -1,6 +1,7 @@
 .idea/
 __pycache__/
 *.pyc
-tasks.json
 .venv/
+tasks.json
 sessions.json
+projects.json

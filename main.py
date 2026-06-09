@@ -4,6 +4,7 @@ import reports
 import filters
 import sessions
 import utils
+import projects
 
 def display_menu():
     print('========== Study Manager ==========')
@@ -16,10 +17,10 @@ def display_menu():
     print('6. Mark task as completed')
     print('7. Edit task')
     print('8. Delete task')
-    print('9. Progress report')
-    print('10. Search tasks')
-    print('11. Filter tasks')
-    print('12. View overdue tasks')
+    print('9. Search tasks')
+    print('10. Filter tasks')
+    print('11. View overdue tasks')
+    print('12. Progress report')
     print()
     print('13. Add study session')
     print('14. View study sessions')
@@ -28,17 +29,25 @@ def display_menu():
     print('17. Study time report')
     print('18. Weekly study report')
     print('19. Monthly study report')
-    print('20. Exit')
+    print()
+    print('20. Add project')
+    print('21. View projects')
+    print('22. View project details')
+    print('23. Edit project')
+    print('24. Delete project')
+    print('25. Project report')
+    print('26. Exit')
     print()
 
 def get_user_choice():
-    choice = utils.get_number_input('Enter your choice (1-20): ', 1, 20)
+    choice = utils.get_number_input('Enter your choice (1-26): ', 1, 26)
     print()
     return choice
 
 def main():
     storage.load_tasks()
     storage.load_sessions()
+    storage.load_projects()
 
     while True:
         display_menu()
@@ -85,24 +94,24 @@ def main():
             tasks.delete_task()
 
         elif choice == 9:
-            print('--Progress report selected--')
-            print()
-            reports.progress_report()
-
-        elif choice == 10:
             print('--Search selected--')
             print()
             filters.search_tasks()
 
-        elif choice == 11:
+        elif choice == 10:
             print('--Filter selected--')
             print()
             filters.filter_tasks()
 
-        elif choice == 12:
+        elif choice == 11:
             print('--View overdue tasks selected--')
             print()
             filters.overdue_tasks()
+
+        elif choice == 12:
+            print('--Progress report selected--')
+            print()
+            reports.task_report()
 
         elif choice == 13:
             print('--Add study session selected--')
@@ -127,19 +136,49 @@ def main():
         elif choice == 17:
             print('--Study time report selected--')
             print()
-            sessions.study_sessions_report()
+            reports.study_sessions_report()
 
         elif choice == 18:
             print('--Weekly study report selected--')
             print()
-            sessions.weekly_study_report()
+            reports.weekly_study_report()
 
         elif choice == 19:
             print('--Monthly study report selected--')
             print()
-            sessions.monthly_study_report()
+            reports.monthly_study_report()
 
         elif choice == 20:
+            print('--Add project selected--')
+            print()
+            projects.add_project()
+
+        elif choice == 21:
+            print('--View project selected--')
+            print()
+            projects.display_projects()
+
+        elif choice == 22:
+            print('--View project details selected--')
+            print()
+            projects.display_project_details()
+
+        elif choice == 23:
+            print('--Edit project selected--')
+            print()
+            projects.edit_project()
+
+        elif choice == 24:
+            print('--Delete project selected--')
+            print()
+            projects.delete_project()
+
+        elif choice == 25:
+            print('--Project report selected--')
+            print()
+            reports.project_report()
+
+        elif choice == 26:
             print('Exiting...')
             break
 
