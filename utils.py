@@ -1,5 +1,6 @@
 from datetime import datetime
 import storage
+import os
 
 def get_number_input(message, min_value = None, max_value = None):
     while True:
@@ -69,7 +70,7 @@ def choose_project():
         return None
 
     print("=== Your projects ===")
-    
+
     print()
     for index, project in enumerate(storage.projects, start=1):
         print(f"{index}. {project['Name']} - {project['Status']}")
@@ -83,7 +84,7 @@ def choose_project():
 
     selected_project = storage.projects[choice - 1]
 
-    return selected_project["ID"]
+    return selected_project['ID']
 
 def get_task_status_text(task):
     if task['Status']:
@@ -109,3 +110,9 @@ def format_minutes(minutes):
         return f"{hours}h"
     else:
         return f"{hours}h {remaining_minutes}min"
+
+def pause():
+    input("\nPress Enter to continue...")
+
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")

@@ -233,32 +233,31 @@ def project_progress_report():
     print(f"Sessions: {sessions}")
 
 def dashboard():
+    print(get_dashboard_text())
+
+def get_dashboard_text():
     pending_tasks = 0
     completed_tasks = 0
     overdue_tasks = 0
     total_study_time = 0
+
     project_not_started = 0
     project_in_progress = 0
     project_paused = 0
     project_completed = 0
 
     today = date.today()
-    found_overdue_tasks = False
 
     for task in storage.tasks:
-        if not task['Status']:
-            pending_tasks += 1
-        else:
+        if task['Status']:
             completed_tasks += 1
+        else:
+            pending_tasks += 1
 
-        deadline = utils.convert_text_to_date(task["Deadline"])
-        if deadline is None:
-            continue
-        if not task["Status"] and deadline < today:
-            found_overdue_tasks = True
+        deadline = utils.convert_text_to_date(task['Deadline'])
+
+        if deadline is not None and not task['Status'] and deadline < today:
             overdue_tasks += 1
-        if not found_overdue_tasks:
-            continue
 
     for session in storage.sessions:
         total_study_time += session['Duration']
@@ -266,32 +265,40 @@ def dashboard():
     for project in storage.projects:
         if project['Status'] == "Not started":
             project_not_started += 1
-
         elif project['Status'] == "In progress":
             project_in_progress += 1
-
         elif project['Status'] == "Paused":
             project_paused += 1
-
         else:
             project_completed += 1
 
+    lines = [
+        "========== Dashboard ==========",
+        "",
+        "Tasks:",
+        f"Total tasks: {len(storage.tasks)}",
+        f"Completed: {completed_tasks}",
+        f"Pending: {pending_tasks}",
+        f"Overdue tasks: {overdue_tasks}",
+        "",
+        "Study:",
+        f"Total study time: {utils.format_minutes(total_study_time)}",
+        f"Sessions: {len(storage.sessions)}",
+        "",
+        "Projects:",
+        f"Total projects: {len(storage.projects)}",
+        f"Not started: {project_not_started}",
+        f"In progress: {project_in_progress}",
+        f"Paused: {project_paused}",
+        f"Completed: {project_completed}",
+    ]
 
-    print("========== Dashboard ==========")
-    print()
-    print("Tasks:")
-    print(f"Total tasks: {len(storage.tasks)}")
-    print(f"Completed: {completed_tasks}")
-    print(f"Pending: {pending_tasks}")
-    print(f"Overdue tasks: {overdue_tasks}")
-    print()
-    print("Study:")
-    print(f"Total study time: {utils.format_minutes(total_study_time)}")
-    print(f"Sessions: {len(storage.sessions)}")
-    print()
-    print("Projects:")
-    print(f"Total projects: {len(storage.projects)}")
-    print(f"Not started: {project_not_started}")
-    print(f"In progress: {project_in_progress}")
-    print(f"Paused: {project_paused}")
-    print(f"Completed: {project_completed}")
+    return "\n".join(lines)
+
+def export_dashboard():
+    dashboard_text = get_dashboard_text()
+
+    with open("dashboard_report.txt", "w", encoding = "utf-8") as file:
+        file.write(dashboard_text)
+
+    print("Dashboard exported successfully to dashboard_report.txt")

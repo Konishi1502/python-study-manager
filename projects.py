@@ -27,6 +27,10 @@ def add_project():
     storage.next_project_id += 1
     storage.save_projects()
 
+def display_single_project(project):
+    for key, value in project.items():
+        print(f"{key}: {value}")
+
 def display_projects():
     if not storage.projects:
         print("You haven't added any projects yet!")
@@ -52,11 +56,7 @@ def display_project_details():
     index = project_number - 1
     selected_project = storage.projects[index]
 
-    for key, value in selected_project.items():
-        print(f"{key}: {value}")
-
-
-
+    display_single_project(selected_project)
 
 def edit_project():
     display_projects()
@@ -73,8 +73,7 @@ def edit_project():
     index = project_number - 1
     selected_project = storage.projects[index]
 
-    for key, value in selected_project.items():
-        print(f"{key}: {value}")
+    display_single_project(selected_project)
 
     print("=== What do you want to edit? ===")
     print()
