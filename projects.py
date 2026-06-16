@@ -55,6 +55,9 @@ def display_project_details():
     for key, value in selected_project.items():
         print(f"{key}: {value}")
 
+
+
+
 def edit_project():
     display_projects()
     if not storage.projects:

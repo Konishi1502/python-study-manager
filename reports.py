@@ -2,6 +2,7 @@ import storage
 import utils
 from datetime import date, timedelta
 
+
 def task_report():
     if not storage.tasks:
         print("You don't have any tasks.")
@@ -178,3 +179,119 @@ def project_report():
     print(f"In progress: {project_status_in_progress}")
     print(f"Paused: {project_status_paused}")
     print(f"Completed: {project_status_completed}")
+
+def project_progress_report():
+    project_id = utils.choose_project()
+    if project_id is None:
+        print("Project not found.")
+        return
+
+    selected_project = None
+    for project in storage.projects:
+        if project["ID"] == project_id:
+            selected_project = project
+            break
+
+    total_tasks = 0
+    completed_tasks = 0
+    pending_tasks = 0
+
+    for task in storage.tasks:
+        if task.get('Project ID') == project_id:
+            total_tasks += 1
+            if task['Status']:
+                completed_tasks += 1
+            else:
+                pending_tasks += 1
+
+    if total_tasks > 0:
+        task_progress = (completed_tasks / total_tasks) * 100
+    else:
+        task_progress = 0
+
+    total_time_spent = 0
+    sessions = 0
+
+    for session in storage.sessions:
+        if session.get('Project ID') == project_id:
+            sessions += 1
+            total_time_spent += session['Duration']
+
+    print("===== Project Progress =====")
+
+    print(f"Project: {selected_project['Name']}")
+    print(f"Status: {selected_project['Status']}")
+    print()
+    print("Tasks:")
+    print(f"Total tasks: {total_tasks}")
+    print(f"Completed tasks: {completed_tasks}")
+    print(f"Pending tasks: {pending_tasks}")
+    print(f"Task progress: {task_progress:.2f}")
+    print()
+    print("Study time:")
+    print(f"Total time spent: {utils.format_minutes(total_time_spent)}")
+    print(f"Sessions: {sessions}")
+
+def dashboard():
+    pending_tasks = 0
+    completed_tasks = 0
+    overdue_tasks = 0
+    total_study_time = 0
+    project_not_started = 0
+    project_in_progress = 0
+    project_paused = 0
+    project_completed = 0
+
+    today = date.today()
+    found_overdue_tasks = False
+
+    for task in storage.tasks:
+        if not task['Status']:
+            pending_tasks += 1
+        else:
+            completed_tasks += 1
+
+        deadline = utils.convert_text_to_date(task["Deadline"])
+        if deadline is None:
+            continue
+        if not task["Status"] and deadline < today:
+            found_overdue_tasks = True
+            overdue_tasks += 1
+        if not found_overdue_tasks:
+            continue
+
+    for session in storage.sessions:
+        total_study_time += session['Duration']
+
+    for project in storage.projects:
+        if project['Status'] == "Not started":
+            project_not_started += 1
+
+        elif project['Status'] == "In progress":
+            project_in_progress += 1
+
+        elif project['Status'] == "Paused":
+            project_paused += 1
+
+        else:
+            project_completed += 1
+
+
+    print("========== Dashboard ==========")
+    print()
+    print("Tasks:")
+    print(f"Total tasks: {len(storage.tasks)}")
+    print(f"Completed: {completed_tasks}")
+    print(f"Pending: {pending_tasks}")
+    print(f"Overdue tasks: {overdue_tasks}")
+    print()
+    print("Study:")
+    print(f"Total study time: {utils.format_minutes(total_study_time)}")
+    print(f"Sessions: {len(storage.sessions)}")
+    print()
+    print("Projects:")
+    print(f"Total projects: {len(storage.projects)}")
+    print(f"Not started: {project_not_started}")
+    print(f"In progress: {project_in_progress}")
+    print(f"Paused: {project_paused}")
+    print(f"Completed: {project_completed}")

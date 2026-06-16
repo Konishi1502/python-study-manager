@@ -21,11 +21,33 @@ def add_study_task():
         'Status': task_status,
         'Created date': created_date,
         'Deadline': task_deadline,
-        'Completed date': task_completed_date
+        'Completed date': task_completed_date,
+        'Project ID': None
     }
 
     storage.tasks.append(task)
     storage.next_task_id += 1
+    storage.save_tasks()
+
+def link_task_to_project():
+    display_tasks()
+    if not storage.tasks:
+        return
+
+    print()
+    task_number = utils.get_number_input(
+        'Select the task you want to link to project: ',
+        1,
+        len(storage.tasks)
+    )
+
+    index = task_number - 1
+
+    project_id = utils.choose_project()
+    if project_id is None:
+        return
+
+    storage.tasks[index]['Project ID'] = project_id
     storage.save_tasks()
 
 def display_single_task(task):

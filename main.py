@@ -31,16 +31,21 @@ def display_menu():
     print('19. Monthly study report')
     print()
     print('20. Add project')
-    print('21. View projects')
-    print('22. View project details')
-    print('23. Edit project')
-    print('24. Delete project')
-    print('25. Project report')
-    print('26. Exit')
+    print('21. Link task to project')
+    print('22. Link session to project')
+    print('23. View projects')
+    print('24. View project details')
+    print('25. View project progress')
+    print('26. Edit project')
+    print('27. Delete project')
+    print('28. Project report')
+    print()
+    print('29. Dashboard')
+    print('30. Exit')
     print()
 
 def get_user_choice():
-    choice = utils.get_number_input('Enter your choice (1-26): ', 1, 26)
+    choice = utils.get_number_input('Enter your choice (1-30): ', 1, 30)
     print()
     return choice
 
@@ -154,31 +159,51 @@ def main():
             projects.add_project()
 
         elif choice == 21:
+            print('--Link task to project selected--')
+            print()
+            tasks.link_task_to_project()
+
+        elif choice == 22:
+            print('--Link session to project selected--')
+            print()
+            sessions.link_session_to_project()
+
+        elif choice == 23:
             print('--View project selected--')
             print()
             projects.display_projects()
 
-        elif choice == 22:
+        elif choice == 24:
             print('--View project details selected--')
             print()
             projects.display_project_details()
 
-        elif choice == 23:
+        elif choice == 25:
+            print('--View project progress selected--')
+            print()
+            reports.project_progress_report()
+
+        elif choice == 26:
             print('--Edit project selected--')
             print()
             projects.edit_project()
 
-        elif choice == 24:
+        elif choice == 27:
             print('--Delete project selected--')
             print()
             projects.delete_project()
 
-        elif choice == 25:
+        elif choice == 28:
             print('--Project report selected--')
             print()
             reports.project_report()
 
-        elif choice == 26:
+        elif choice == 29:
+            print('--Dashboard selected--')
+            print()
+            reports.dashboard()
+
+        elif choice == 30:
             print('Exiting...')
             break
 

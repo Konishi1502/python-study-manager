@@ -1,4 +1,5 @@
 from datetime import datetime
+import storage
 
 def get_number_input(message, min_value = None, max_value = None):
     while True:
@@ -61,6 +62,28 @@ def choose_project_status():
         return "Paused"
     else:
         return "Completed"
+
+def choose_project():
+    if not storage.projects:
+        print("You haven't added any projects yet!")
+        return None
+
+    print("=== Your projects ===")
+    
+    print()
+    for index, project in enumerate(storage.projects, start=1):
+        print(f"{index}. {project['Name']} - {project['Status']}")
+    print()
+
+    choice = get_number_input(
+        "Select a project: ",
+        1,
+        len(storage.projects)
+    )
+
+    selected_project = storage.projects[choice - 1]
+
+    return selected_project["ID"]
 
 def get_task_status_text(task):
     if task['Status']:

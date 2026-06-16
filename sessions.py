@@ -18,11 +18,34 @@ def add_study_session():
         'Topic': session_topic,
         'Duration': session_duration,
         'Date': session_date,
-        'Notes': session_notes
+        'Notes': session_notes,
+        'Project ID': None
     }
 
     storage.sessions.append(session)
     storage.next_session_id += 1
+    storage.save_sessions()
+
+
+def link_session_to_project():
+    display_sessions()
+    if not storage.sessions:
+        return
+
+    print()
+    session_number = utils.get_number_input(
+        'Select the session you want to link to project: ',
+        1,
+        len(storage.sessions)
+    )
+
+    index = session_number - 1
+
+    project_id = utils.choose_project()
+    if project_id is None:
+        return
+
+    storage.sessions[index]['Project ID'] = project_id
     storage.save_sessions()
 
 def display_sessions():
