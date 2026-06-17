@@ -74,6 +74,7 @@ def edit_project():
     selected_project = storage.projects[index]
 
     display_single_project(selected_project)
+    print()
 
     print("=== What do you want to edit? ===")
     print()
@@ -87,6 +88,7 @@ def edit_project():
     print(f"8. Deadline - {selected_project['Deadline']}")
     print("9. Go back")
 
+    print()
     details_number = utils.get_number_input("Enter your choice (1-9): ", 1, 9)
     print()
 

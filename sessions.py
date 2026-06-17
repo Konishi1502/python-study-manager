@@ -96,7 +96,7 @@ def edit_study_session():
     index = session_number - 1
     selected_session = storage.sessions[index]
 
-    display_single_session(session)
+    display_single_session(selected_session)
 
     print()
     print("=== What do you want to edit? ===")

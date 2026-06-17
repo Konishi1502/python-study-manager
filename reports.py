@@ -161,6 +161,7 @@ def project_report():
     project_status_completed = 0
 
     print("===== Project Report =====")
+    print()
     print(f"Total projects: {len(storage.projects)}")
     for project in storage.projects:
         if project['Status'] == "Not started":
@@ -217,8 +218,9 @@ def project_progress_report():
             sessions += 1
             total_time_spent += session['Duration']
 
+    print()
     print("===== Project Progress =====")
-
+    print()
     print(f"Project: {selected_project['Name']}")
     print(f"Status: {selected_project['Status']}")
     print()
@@ -226,7 +228,7 @@ def project_progress_report():
     print(f"Total tasks: {total_tasks}")
     print(f"Completed tasks: {completed_tasks}")
     print(f"Pending tasks: {pending_tasks}")
-    print(f"Task progress: {task_progress:.2f}")
+    print(f"Task progress: {task_progress:.0f}%")
     print()
     print("Study time:")
     print(f"Total time spent: {utils.format_minutes(total_time_spent)}")
