@@ -5,3 +5,4 @@ __pycache__/
 tasks.json
 sessions.json
 projects.json
+dashboard_report.txt
